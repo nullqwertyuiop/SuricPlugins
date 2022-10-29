@@ -49,10 +49,78 @@ _data
 @decorate(Switch.check(channel.module), Distribution.distribute(), Blacklist.check())
 async def daily_news(app: Ariadne, event: MessageEvent):
     RandomSeed(event.sender)
-    dick_color = random.choice(COLOR_TEMPLATES)
-    dick_outward = random.choice(OUTWARD_TEMPLATES)
-    dick_comment_score = 0.0
-    dick_comment_score_time = 6
+    # #######################################################################
+    # TODO:PlayWright重构
+    # #######################################################################
+    # 需要首先判断牛子是否大于0
+    news_length = random.randint(-10, 30)
+    news_or_cloaca = ""
+    a = "\n"
+    if news_length > 0:
+
+        # 确定拥有的生殖器类型
+        news_or_cloaca = "牛子"
+
+        # 确定是否勃起
+        if random.randint(0, 1) == 1:
+            boki_status = "勃起"
+            angle_status = "勃起"
+            angle = f"{random.randint(90, 180)}度"
+        else:
+            boki_status = "软掉"
+            angle_status = ""
+            angle = f"{random.randint(0, 90)}度"
+
+        # 判断是否包茎
+        rd_phimosis_status = random.randint(0, 2)
+        if rd_phimosis_status == 0:
+            phimosis_status = "包茎"
+        elif rd_phimosis_status == 1:
+            phimosis_status = "半包茎"
+        else:
+            phimosis_status = "非包茎"
+
+        # 判断蛋蛋重量
+        rd_egg_weight = random.randint(50, 500)
+        egg_weight = f"{rd_egg_weight}克"
+
+        # 生成牛子的系统评价 # 生成牛子的大众点评
+        if news_length > 20:
+            dick_length_evaluate = random.choice(EVALUATE_TEMPLATES_0)
+            dick_comment = random.choice(COMMENT_TEMPLATES_0)
+            news_score = random.randint(60,100)
+        elif 15 < news_length <= 20:
+            dick_length_evaluate = random.choice(EVALUATE_TEMPLATES_1)
+            dick_comment = random.choice(COMMENT_TEMPLATES_1)
+            news_score = random.randint(40,80)
+        elif 10 <= news_length <= 15:
+            dick_length_evaluate = random.choice(EVALUATE_TEMPLATES_2)
+            dick_comment = random.choice(COMMENT_TEMPLATES_2)
+            news_score = random.randint(30,60)
+        elif 0 < news_length < 10:
+            dick_length_evaluate = random.choice(EVALUATE_TEMPLATES_3)
+            dick_comment = random.choice(COMMENT_TEMPLATES_3)
+            news_score = random.randint(0,30)
+        
+              
+
+    elif news_length < 0:
+        news_or_cloaca = "泄殖腔"
+        # 生成泄殖腔的系统评价 # 生成泄殖腔的大众点评
+        dick_length_evaluate = random.choice(EVALUATE_TEMPLATES_5)
+        dick_comment = random.choice(COMMENT_TEMPLATES_5)
+        news_score = random.randint(0,100)
+        
+       
+
+    elif news_length == 0:
+        news_or_cloaca = "如履平地"
+        # 生成独特的评价
+        dick_length_evaluate = random.choice(EVALUATE_TEMPLATES_4)
+        dick_comment = random.choice(COMMENT_TEMPLATES_4)
+        news_score = 0
+
+    # 照搬旧版的附魔系统
     if random.randint(0, 4) == 0:
         enchant_lv = ["Ⅰ", "Ⅱ", "Ⅲ", "Ⅳ", "Ⅴ"]
         enchant_list = [
@@ -81,91 +149,56 @@ async def daily_news(app: Ariadne, event: MessageEvent):
         dick_enchant += "的"
     else:
         dick_enchant = ""
-
-    # 先判断boki
-    if random.randint(0, 1) == 1:
-        boki_status = "勃起"
-        angle = f"{random.randint(90, 180)}度"
-        angle_status = "boki"
-        dick_comment_score += 10
-    else:
-        boki_status = "软掉"
-        angle = f"{random.randint(0, 90)}度"
-        angle_status = ""
-        dick_color = ""
-        dick_outward = ""
+        
 
 
-    rd_phimosis_status = random.randint(0, 2)
-    if rd_phimosis_status == 0:
-        phimosis_status = "包茎"
-    elif rd_phimosis_status == 1:
-        phimosis_status = "半包茎"
-    else:
-        phimosis_status = "非包茎"
-    dick_comment_score += rd_phimosis_status * 5
-
-    rd_dick_hardness = random.randint(1, 10)
-    dick_hardness = f"莫氏硬度为{rd_dick_hardness}"
-    dick_comment_score += rd_dick_hardness
-
-    rd_egg_weight = random.randint(50, 1000)
-    egg_weight = f"{rd_egg_weight}克"
-    dick_comment_score += rd_egg_weight * 10 / 951.0
-
-    dick_legth = random.randint(-10, 30)
-    if dick_legth > 0:
-        dick_comment_score += dick_legth / 3.0
-    elif dick_legth != 0:
-        dick_comment_score += abs(dick_legth)
-
-    if dick_legth > 20:
-        dick_length_evaluate = random.choice(EVALUATE_TEMPLATES_0)
-        dick_comment = random.choice(COMMENT_TEMPLATES_0)
-    elif 15 < dick_legth <= 20:
-        dick_length_evaluate = random.choice(EVALUATE_TEMPLATES_1)
-        dick_comment = random.choice(COMMENT_TEMPLATES_1)
-    elif 10 <= dick_legth <= 15:
-        dick_length_evaluate = random.choice(EVALUATE_TEMPLATES_2)
-        dick_comment = random.choice(COMMENT_TEMPLATES_2)
-    elif 0 < dick_legth < 10:
-        dick_length_evaluate = random.choice(EVALUATE_TEMPLATES_3)
-        dick_comment = random.choice(COMMENT_TEMPLATES_3)
-    elif dick_legth == 0:
-        dick_length_evaluate = random.choice(EVALUATE_TEMPLATES_4)
-        dick_comment = random.choice(COMMENT_TEMPLATES_4)
-    else:
-        dick_length_evaluate = random.choice(EVALUATE_TEMPLATES_5)
-        dick_comment = random.choice(COMMENT_TEMPLATES_5)
-    a = "\n"
-    length_text = f"{dick_legth}cm的牛子，{a}{dick_length_evaluate}"
-
-
-    # #######################################################################
     # 新功能
     # 牛子颜色
+    ## 定义三个数值来生成 RGB
     cr = random.randint(0,255)
     cg = random.randint(0,255)
     cb = random.randint(0,255)
+    ## 没用的两个参数
     black = "black"
     white = "white"
+    ## 设想是如果r+g+b大于382就将覆盖层文字修改为黑色，否则为白色
     if(cr+cg+cb>382):
         textcolor = black
     else:
         textcolor = white
-    # RGB-to-Hex
+    # RGB-to-Hex 将RGB转换为Hex值，使其占用长度减少
     Hexcolor = ('{:02X}' * 3).format(cr, cg, cb)
     print (cr,cg,cb)
     print (Hexcolor)
     # #######################################################################
+    # 先判断牛子是否大于0
+    # >0 为正常牛子
+    # <0 为腔
+    # #######################################################################
+
+    # 向PlayWright输出的参数内容
+    # 生殖器类型
+    News_or_cloaca_out = news_or_cloaca
+    # 长度
+    News_length_out = news_length
+    # 系统评价
+    System_comment_out = dick_length_evaluate
+    # 颜色
+    Hexcolor_out = f"#{Hexcolor}颜色的"
+    # 大众点评分数
+    Score_out = news_score/10
+    if (news_or_cloaca == "牛子"):
+        news_message = (f"你今天有一根{dick_enchant}{Hexcolor_out}{boki_status}的{News_length_out}CM长的，{angle_status}角度为{angle}的{phimosis_status}的,并且蛋蛋{egg_weight}的牛子{a}系统点评：{System_comment_out}{a}大众点评：{Score_out}分，{dick_comment}")
+    else:
+        news_message = (f"你今天有一根{dick_enchant}{Hexcolor_out}的{News_length_out}CM深的泄殖腔{a}系统点评：{System_comment_out}{a}大众点评：{Score_out}分，{dick_comment}")
 
     await send_message(
         event.sender.group if isinstance(event, GroupMessage) else event.sender,
-        MessageChain(f"你今天有一根{dick_enchant}{dick_color}{dick_outward}{boki_status}的，{angle_status}角度为{angle}的{phimosis_status}的{dick_hardness},并且蛋蛋{egg_weight}的{length_text}{a}大众点评：{round(dick_comment_score/dick_comment_score_time,1)}分，{dick_comment}"),
+        MessageChain(news_message),
         app.account,
     )
     random.seed()
 
-
+# Seed
 def RandomSeed(supplicant: Member | Friend):
     random.seed(int(f"{datetime.now().strftime('%Y%m%d')}{supplicant.id}"))
