@@ -4,7 +4,13 @@ import json
 from pathlib import Path
 
 from graia.ariadne import Ariadne
-from graia.ariadne.event.message import  Friend, Member, GroupMessage, FriendMessage, MessageEvent
+from graia.ariadne.event.message import (
+    Friend,
+    Member,
+    GroupMessage,
+    FriendMessage,
+    MessageEvent,
+)
 from graia.ariadne.message.chain import MessageChain
 from graia.ariadne.message.parser.twilight import (
     Twilight,
@@ -88,32 +94,28 @@ async def daily_news(app: Ariadne, event: MessageEvent):
         if news_length > 20:
             dick_length_evaluate = random.choice(EVALUATE_TEMPLATES_0)
             dick_comment = random.choice(COMMENT_TEMPLATES_0)
-            news_score = random.randint(60,100)
+            news_score = random.randint(60, 100)
         elif 15 < news_length <= 20:
             dick_length_evaluate = random.choice(EVALUATE_TEMPLATES_1)
             dick_comment = random.choice(COMMENT_TEMPLATES_1)
-            news_score = random.randint(40,80)
+            news_score = random.randint(40, 80)
         elif 10 <= news_length <= 15:
             dick_length_evaluate = random.choice(EVALUATE_TEMPLATES_2)
             dick_comment = random.choice(COMMENT_TEMPLATES_2)
-            news_score = random.randint(30,60)
-        elif 0 < news_length < 10:
+            news_score = random.randint(30, 60)
+        else:
             dick_length_evaluate = random.choice(EVALUATE_TEMPLATES_3)
             dick_comment = random.choice(COMMENT_TEMPLATES_3)
-            news_score = random.randint(0,30)
-        
-              
+            news_score = random.randint(0, 30)
 
     elif news_length < 0:
         news_or_cloaca = "泄殖腔"
         # 生成泄殖腔的系统评价 # 生成泄殖腔的大众点评
         dick_length_evaluate = random.choice(EVALUATE_TEMPLATES_5)
         dick_comment = random.choice(COMMENT_TEMPLATES_5)
-        news_score = random.randint(0,100)
-        
-       
+        news_score = random.randint(0, 100)
 
-    elif news_length == 0:
+    else:
         news_or_cloaca = "如履平地"
         # 生成独特的评价
         dick_length_evaluate = random.choice(EVALUATE_TEMPLATES_4)
@@ -133,6 +135,7 @@ async def daily_news(app: Ariadne, event: MessageEvent):
         ]
         rd_enchant = random.randint(0, 5)
         dick_enchant = enchant_list[rd_enchant]
+        dick_comment_score = 0
         if rd_enchant < 2:
             dick_comment_score += rd_enchant * 10
         else:
@@ -149,27 +152,25 @@ async def daily_news(app: Ariadne, event: MessageEvent):
         dick_enchant += "的"
     else:
         dick_enchant = ""
-        
-
 
     # 新功能
     # 牛子颜色
-    ## 定义三个数值来生成 RGB
-    cr = random.randint(0,255)
-    cg = random.randint(0,255)
-    cb = random.randint(0,255)
-    ## 没用的两个参数
+    # 定义三个数值来生成 RGB
+    cr = random.randint(0, 255)
+    cg = random.randint(0, 255)
+    cb = random.randint(0, 255)
+    # 没用的两个参数
     black = "black"
     white = "white"
-    ## 设想是如果r+g+b大于382就将覆盖层文字修改为黑色，否则为白色
-    if(cr+cg+cb>382):
+    # 设想是如果r+g+b大于382就将覆盖层文字修改为黑色，否则为白色
+    if cr + cg + cb > 382:
         textcolor = black
     else:
         textcolor = white
     # RGB-to-Hex 将RGB转换为Hex值，使其占用长度减少
-    Hexcolor = ('{:02X}' * 3).format(cr, cg, cb)
-    print (cr,cg,cb)
-    print (Hexcolor)
+    Hexcolor = ("{:02X}" * 3).format(cr, cg, cb)
+    # print(cr, cg, cb)
+    # print(Hexcolor)
     # #######################################################################
     # 先判断牛子是否大于0
     # >0 为正常牛子
@@ -186,11 +187,11 @@ async def daily_news(app: Ariadne, event: MessageEvent):
     # 颜色
     Hexcolor_out = f"#{Hexcolor}颜色的"
     # 大众点评分数
-    Score_out = news_score/10
-    if (news_or_cloaca == "牛子"):
-        news_message = (f"你今天有一根{dick_enchant}{Hexcolor_out}{boki_status}的{News_length_out}CM长的，{angle_status}角度为{angle}的{phimosis_status}的,并且蛋蛋{egg_weight}的牛子{a}系统点评：{System_comment_out}{a}大众点评：{Score_out}分，{dick_comment}")
+    Score_out = news_score / 10
+    if news_or_cloaca == "牛子":
+        news_message = f"你今天有一根{dick_enchant}{Hexcolor_out}{boki_status}的{News_length_out}CM长的，{angle_status}角度为{angle}的{phimosis_status}的,并且蛋蛋{egg_weight}的牛子{a}系统点评：{System_comment_out}{a}大众点评：{Score_out}分，{dick_comment}"
     else:
-        news_message = (f"你今天有一根{dick_enchant}{Hexcolor_out}的{News_length_out}CM深的泄殖腔{a}系统点评：{System_comment_out}{a}大众点评：{Score_out}分，{dick_comment}")
+        news_message = f"你今天有一根{dick_enchant}{Hexcolor_out}的{News_length_out}CM深的泄殖腔{a}系统点评：{System_comment_out}{a}大众点评：{Score_out}分，{dick_comment}"
 
     await send_message(
         event.sender.group if isinstance(event, GroupMessage) else event.sender,
