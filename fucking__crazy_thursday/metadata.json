@@ -1,13 +1,12 @@
 {
-    "name": "今日牛子",
-    "version": "2.0.0",
-    "pack": "module.daily_news",
+    "name": "疯狂星期四",
+    "version": "1.0.0",
+    "pack": "module.fucking_crazy_thursday",
     "authors": [
-        "suchen",
-        "a57495681800"
+        "suchen"
     ],
     "required": [],
-    "description": "获取你的每日牛子，每天一根，不许多拿！",
+    "description": "疯狂星期四",
     "category": [
         "delicious:美味",
         "random:随机"

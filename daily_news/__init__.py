@@ -4,30 +4,22 @@ import json
 from pathlib import Path
 
 from graia.ariadne import Ariadne
-from graia.ariadne.event.message import (
-    Friend,
-    Member,
-    GroupMessage,
-    FriendMessage,
-    MessageEvent,
-)
+from graia.ariadne.event.message import Friend, Member, GroupMessage, FriendMessage, MessageEvent
 from graia.ariadne.message.chain import MessageChain
-from graia.ariadne.message.parser.twilight import (
-    Twilight,
-    FullMatch,
-    RegexMatch,
-    RegexResult,
-)
+from graia.ariadne.message.element import Image
+from graia.ariadne.message.parser.twilight import Twilight, FullMatch,UnionMatch
 from graia.ariadne.util.saya import listen, dispatch, decorate
 from graia.saya import Channel
+from graiax.playwright import PlaywrightBrowser
 
-from library.decorator.blacklist import Blacklist
-from library.decorator.distribute import Distribution
-from library.decorator.switch import Switch
+from library.decorator.permission import Permission
+from library.model.permission import UserPerm
 from library.util.dispatcher import PrefixMatch
 from library.util.message import send_message
 
 channel = Channel.current()
+# ################################################################
+# 读取Json文件
 assets_path = Path(Path(__file__).parent, "assets")
 settings_file = Path(assets_path / "news_settings.json")
 
@@ -48,12 +40,15 @@ with settings_file.open("r", encoding="UTF-8") as f:
     COMMENT_TEMPLATES_4 = _data["public_comment_4"]
     COMMENT_TEMPLATES_5 = _data["public_comment_5"]
 _data
-
-
+# ################################################################
 @listen(GroupMessage, FriendMessage)
-@dispatch(Twilight(PrefixMatch(), FullMatch("今日牛子")))
-@decorate(Switch.check(channel.module), Distribution.distribute(), Blacklist.check())
-async def daily_news(app: Ariadne, event: MessageEvent):
+@dispatch(
+    Twilight(
+        PrefixMatch(),
+        UnionMatch("今日牛子","随机牛子","我几把呢")
+    )
+)
+async def playwright_showcase(app: Ariadne, event: MessageEvent):
     RandomSeed(event.sender)
     # #######################################################################
     # TODO:PlayWright重构
@@ -88,7 +83,7 @@ async def daily_news(app: Ariadne, event: MessageEvent):
 
         # 判断蛋蛋重量
         rd_egg_weight = random.randint(50, 500)
-        egg_weight = f"{rd_egg_weight}克"
+        egg_weight = f"{rd_egg_weight}"
 
         # 生成牛子的系统评价 # 生成牛子的大众点评
         if news_length > 20:
@@ -151,26 +146,27 @@ async def daily_news(app: Ariadne, event: MessageEvent):
             dick_enchant += enchant_lv[rd_lv]
         dick_enchant += "的"
     else:
-        dick_enchant = ""
+        dick_enchant = "None"
 
     # 新功能
     # 牛子颜色
-    # 定义三个数值来生成 RGB
+    ## 定义三个数值来生成 RGB
     cr = random.randint(0, 255)
     cg = random.randint(0, 255)
     cb = random.randint(0, 255)
-    # 没用的两个参数
+    ## 没用的两个参数
     black = "black"
     white = "white"
-    # 设想是如果r+g+b大于382就将覆盖层文字修改为黑色，否则为白色
+    ## 设想是如果r+g+b大于382就将覆盖层文字修改为黑色，否则为白色
     if cr + cg + cb > 382:
-        textcolor = black
+        Hextextcolor = "rgb(0,0,0)"
     else:
-        textcolor = white
+        Hextextcolor = "rgb(255,255,255)"
     # RGB-to-Hex 将RGB转换为Hex值，使其占用长度减少
     Hexcolor = ("{:02X}" * 3).format(cr, cg, cb)
-    # print(cr, cg, cb)
-    # print(Hexcolor)
+    print(cr, cg, cb)
+    print(Hexcolor)
+    print(Hextextcolor)
     # #######################################################################
     # 先判断牛子是否大于0
     # >0 为正常牛子
@@ -185,7 +181,12 @@ async def daily_news(app: Ariadne, event: MessageEvent):
     # 系统评价
     System_comment_out = dick_length_evaluate
     # 颜色
-    Hexcolor_out = f"#{Hexcolor}颜色的"
+    Hextextcolor_out = Hextextcolor
+    Hexcolor_out = f"#{Hexcolor}"
+    dick_enchant_out = dick_enchant
+    phimosis_status_out = phimosis_status
+    boki_status_out = boki_status
+    egg_weight_out = egg_weight
     # 大众点评分数
     Score_out = news_score / 10
     if news_or_cloaca == "牛子":
@@ -193,12 +194,283 @@ async def daily_news(app: Ariadne, event: MessageEvent):
     else:
         news_message = f"你今天有一根{dick_enchant}{Hexcolor_out}的{News_length_out}CM深的泄殖腔{a}系统点评：{System_comment_out}{a}大众点评：{Score_out}分，{dick_comment}"
 
-    await send_message(
-        event.sender.group if isinstance(event, GroupMessage) else event.sender,
-        MessageChain(news_message),
-        app.account,
-    )
+
     random.seed()
+
+
+
+    # #######################################################################
+    html = """
+    
+<!doctype html>
+<html lang="zh-cmn-Hans">
+<html>
+
+<head>
+</head>
+<style>
+    @font-face {
+        font-family: Rubik;
+        src: url('Rubik-VariableFont_wght.ttf') format("ttf");
+    }
+
+    /* fallback */
+    @font-face {
+        font-family: 'Material Symbols Rounded';
+        font-style: normal;
+        font-weight: 100 700;
+        src: url(https://fonts.gstatic.com/s/materialsymbolsoutlined/v63/kJEhBvYX7BgnkSrUwT8OhrdQw4oELdPIeeII9v6oFsI.woff2) format('woff2');
+    }
+
+    /* cyrillic-ext */
+    @font-face {
+        font-family: 'Rubik';
+        font-style: normal;
+        font-weight: 400;
+        font-display: swap;
+        src: url(https://fonts.gstatic.com/s/rubik/v21/iJWZBXyIfDnIV5PNhY1KTN7Z-Yh-B4iFWkU1Z4Y.woff2) format('woff2');
+        unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+    }
+
+    /* cyrillic */
+    @font-face {
+        font-family: 'Rubik';
+        font-style: normal;
+        font-weight: 400;
+        font-display: swap;
+        src: url(https://fonts.gstatic.com/s/rubik/v21/iJWZBXyIfDnIV5PNhY1KTN7Z-Yh-B4iFU0U1Z4Y.woff2) format('woff2');
+        unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+    }
+
+    /* hebrew */
+    @font-face {
+        font-family: 'Rubik';
+        font-style: normal;
+        font-weight: 400;
+        font-display: swap;
+        src: url(https://fonts.gstatic.com/s/rubik/v21/iJWZBXyIfDnIV5PNhY1KTN7Z-Yh-B4iFVUU1Z4Y.woff2) format('woff2');
+        unicode-range: U+0590-05FF, U+200C-2010, U+20AA, U+25CC, U+FB1D-FB4F;
+    }
+
+    /* latin-ext */
+    @font-face {
+        font-family: 'Rubik';
+        font-style: normal;
+        font-weight: 400;
+        font-display: swap;
+        src: url(https://fonts.gstatic.com/s/rubik/v21/iJWZBXyIfDnIV5PNhY1KTN7Z-Yh-B4iFWUU1Z4Y.woff2) format('woff2');
+        unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+    }
+
+    /* latin */
+    @font-face {
+        font-family: 'Rubik';
+        font-style: normal;
+        font-weight: 400;
+        font-display: swap;
+        src: url(https://fonts.gstatic.com/s/rubik/v21/iJWZBXyIfDnIV5PNhY1KTN7Z-Yh-B4iFV0U1.woff2) format('woff2');
+        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+        font-family: 'Rubik', Fallback, sans-serif;
+    }
+
+    .material-symbols-rounded {
+        font-family: 'Material Symbols Rounded';
+        font-weight: normal;
+        font-style: normal;
+        font-size: 24px;
+        line-height: 1;
+        letter-spacing: normal;
+        text-transform: none;
+        display: inline-block;
+        white-space: nowrap;
+        word-wrap: normal;
+        direction: ltr;
+        -webkit-font-feature-settings: 'liga';
+        -webkit-font-smoothing: antialiased;
+    }
+
+    .Rubik-font {
+        font-family: Rubik;
+    }
+
+    .right-align {
+        text-align: right;
+    }
+
+    .limit {
+        width: 1440px;
+        height: 900px;
+        background-color: red;
+    }
+</style>
+
+"""+f"""
+
+<body class="limit" style="margin:0px;padding:0px;background-color:transparent;">
+    <div style="background-color: #FDFCFC; border-radius: 64px;">
+        <div style="height:180px;background-color: rgba(46, 101, 120, 0.05);">
+            <div style="display: flex;line-height: 180px">
+                <span class="Rubik-font" style="font-size: 56px;margin-left:56px;">Random_News</span>
+                <span class="Rubik-font right-align" style="font-size: 64px;margin-right: 56px;flex: 1;">{Score_out}<span
+                        style="font-size: 24px;;">分</span></span>
+            </div>
+            <div style="display: flex;">
+                <div style="width: 400px;padding: 20px 0px 40px 40px;">
+                    <h2 style="text-align: center;">您今天拥有的是{News_or_cloaca_out}</h2><br>
+                    <div style="border: 1px dashed #74787A;border-radius: 50px;text-align: center;padding: 20px;">
+                        <div style="display: flex;">
+                            <div style="flex: 1;"></div>
+                            <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" style="padding:3px 0px">
+                                <path
+                                    d="M11.875 22.8q-2.225 0-4.2-.85t-3.437-2.312Q2.775 18.175 1.925 16.2q-.85-1.975-.85-4.2 0-2.25.863-4.225Q2.8 5.8 4.3 4.338q1.5-1.463 3.5-2.301 2-.837 4.275-.837 2.2 0 4.163.762 1.962.763 3.45 2.1 1.487 1.338 2.362 3.15.875 1.813.875 3.938 0 3.325-2.15 4.937-2.15 1.613-4.8 1.613h-1.25q-.075 0-.137.062-.063.063-.063.138 0 .15.25.525t.25 1.125q0 1.35-.937 2.3-.938.95-2.213.95ZM12 12Zm-5.725 1.3q.75 0 1.275-.525.525-.525.525-1.275 0-.75-.525-1.275Q7.025 9.7 6.275 9.7q-.75 0-1.275.525-.525.525-.525 1.275 0 .75.525 1.275.525.525 1.275.525Zm3.05-4.1q.75 0 1.275-.525.525-.525.525-1.275 0-.75-.525-1.275-.525-.525-1.275-.525-.75 0-1.275.525-.525.525-.525 1.275 0 .75.525 1.275.525.525 1.275.525Zm5.1 0q.75 0 1.275-.525.525-.525.525-1.275 0-.75-.525-1.275-.525-.525-1.275-.525-.75 0-1.275.525-.525.525-.525 1.275 0 .75.525 1.275.525.525 1.275.525Zm3.1 4.1q.75 0 1.275-.525.525-.525.525-1.275 0-.75-.525-1.275-.525-.525-1.275-.525-.75 0-1.275.525-.525.525-.525 1.275 0 .75.525 1.275.525.525 1.275.525Zm-5.75 6.85q.275 0 .438-.112.162-.113.162-.338 0-.375-.375-.787-.375-.413-.375-1.363 0-1.125.75-1.812.75-.688 1.8-.688h1.8q1.55 0 2.925-.838 1.375-.837 1.375-3.062 0-3.175-2.437-5.238Q15.4 3.85 12.075 3.85q-3.475 0-5.913 2.362Q3.725 8.575 3.725 12q0 3.4 2.325 5.775 2.325 2.375 5.725 2.375Z" />
+                            </svg>
+                            <div style="width: 12px;"></div>
+                            <span class="Rubik-font"
+                                style="line-height: 30px;font-size: 24px;padding:0px 8px 0px 0px">颜色</span>
+                            <span class="Rubik-font"
+                                style="line-height: 30px;font-size: 24px;background-color: {Hexcolor_out};padding:0px 8px;color{Hextextcolor_out}">{Hexcolor_out}</span>
+                            <div style="flex: 1;"></div>
+                        </div>
+                    </div>
+                    <br>
+                    <div style="border: 1px dashed #74787A;border-radius: 50px;text-align: center;padding: 20px;">
+                        <div style="display: flex;">
+                            <div style="flex: 1;"></div>
+                            <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" style="padding:3px 0px">
+                                <path
+                                    d="M5 22.325q-1.375 0-2.35-.975-.975-.975-.975-2.35 0-1.025.563-1.837.562-.813 1.437-1.213v-7.9q-.875-.4-1.437-1.213Q1.675 6.025 1.675 5q0-1.375.975-2.35.975-.975 2.35-.975 1.025 0 1.838.562.812.563 1.212 1.438h7.9q.375-.875 1.187-1.438.813-.562 1.863-.562 1.375 0 2.35.975.975.975.975 2.35 0 1.05-.562 1.863-.563.812-1.438 1.187v7.9q.875.4 1.438 1.213.562.812.562 1.837 0 1.375-.975 2.35-.975.975-2.35.975-1.025 0-1.837-.563-.813-.562-1.213-1.437h-7.9q-.4.875-1.212 1.437-.813.563-1.838.563Zm0-16.65q.275 0 .475-.2.2-.2.2-.475 0-.275-.2-.475-.2-.2-.475-.2-.275 0-.475.2-.2.2-.2.475 0 .275.2.475.2.2.475.2Zm14 0q.275 0 .475-.2.2-.2.2-.475 0-.275-.2-.475-.2-.2-.475-.2-.275 0-.475.2-.2.2-.2.475 0 .275.2.475.2.2.475.2Zm-10.95 12h7.9q.25-.575.7-1.025.45-.45 1.025-.7v-7.9q-.575-.25-1.025-.7-.45-.45-.7-1.025h-7.9q-.25.575-.7 1.025-.45.45-1.025.7v7.9q.575.25 1.025.7.45.45.7 1.025Zm10.95 2q.275 0 .475-.2.2-.2.2-.475 0-.275-.2-.475-.2-.2-.475-.2-.275 0-.475.2-.2.2-.2.475 0 .275.2.475.2.2.475.2Zm-14 0q.275 0 .475-.2.2-.2.2-.475 0-.275-.2-.475-.2-.2-.475-.2-.275 0-.475.2-.2.2-.2.475 0 .275.2.475.2.2.475.2ZM5 5Zm14 0Zm0 14ZM5 19Z" />
+                            </svg>
+                            <div style="width: 12px;"></div>
+                            <span class="Rubik-font"
+                                style="line-height: 30px;font-size: 24px;padding:0px 8px 0px 0px">附魔</span>
+                            <span class="Rubik-font"
+                                style="line-height: 30px;font-size: 24px;padding-right: 5px;">{ dick_enchant_out}</span>
+                            <div style="flex: 1;"></div>
+                        </div>
+                    </div>
+                    <br>
+                    <div style="border: 1px dashed #74787A;border-radius: 50px;text-align: center;padding: 20px;">
+                        <div style="display: flex;">
+                            <div style="flex: 1;"></div>
+                            <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" style="padding:3px 0px">
+                                <path
+                                    d="M4.85 21.8q-1.1 0-1.875-.775Q2.2 20.25 2.2 19.15v-4.1h2.65v4.1h4.1v2.65Zm10.2 0v-2.65h4.1v-4.1h2.65v4.1q0 1.1-.775 1.875-.775.775-1.875.775ZM2.2 8.95v-4.1q0-1.1.775-1.875Q3.75 2.2 4.85 2.2h4.1v2.65h-4.1v4.1Zm16.95 0v-4.1h-4.1V2.2h4.1q1.1 0 1.875.775.775.775.775 1.875v4.1Z" />
+                            </svg>
+                            <div style="width: 12px;"></div>
+                            <span class="Rubik-font"
+                                style="line-height: 30px;font-size: 24px;padding:0px 8px 0px 0px">长度</span>
+                            <span class="Rubik-font"
+                                style="line-height: 30px;font-size: 24px;padding-right: 5px;">{News_length_out}</span>
+                            <span class="Rubik-font" style="line-height: 30px;font-size: 24px;">CM</span>
+                            <div style="flex: 1;"></div>
+                        </div>
+                    </div>
+                    <br>
+                    <div style="border: 1px dashed #74787A;border-radius: 50px;text-align: center;padding: 20px;">
+                        <div style="display: flex;">
+                            <div style="flex: 1;"></div>
+                            <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" style="padding:3px 0px">
+                                <path
+                                    d="m9.9 22.275-1.85-1.85 9.2-9.2H16v-2.65h5.75v5.75H19.1v-1.25Zm-1.7-6.4L2.625 3.85l1.9-1.9L16.55 7.525 14.825 9.25 11.95 7.9 8.6 11.25l1.375 2.85ZM7.6 9.25 9.975 6.9 5.4 4.675l-.05.05Z" />
+                            </svg>
+                            <div style="width: 12px;"></div>
+                            <span class="Rubik-font"
+                                style="line-height: 30px;font-size: 24px;padding:0px 8px 0px 0px">角度</span>
+                            <span class="Rubik-font" style="line-height: 30px;font-size: 24px;">{angle}</span>
+                            <span class="Rubik-font" style="line-height: 30px;font-size: 24px;">°</span>
+                            <div style="flex: 1;"></div>
+                        </div>
+                    </div>
+                    <br>
+                    <div style="border: 1px dashed #74787A;border-radius: 50px;text-align: center;padding: 20px;">
+                        <div style="display: flex;">
+                            <div style="flex: 1;"></div>
+                            <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" style="padding:3px 0px">
+                                <path d="M6.4 18.45 4.55 16.6l9.25-9.275H5.675v-2.65h12.65v12.65h-2.65V9.2Z" />
+                            </svg>
+                            <div style="width: 12px;"></div>
+                            <span class="Rubik-font"
+                                style="line-height: 30px;font-size: 24px;padding:0px 8px 0px 0px">{boki_status_out}/{phimosis_status_out}</span>
+                            <div style="flex: 1;"></div>
+                        </div>
+                    </div>
+                    <br>
+                    <div style="border: 1px dashed #74787A;border-radius: 50px;text-align: center;padding: 20px;">
+                        <div style="display: flex;">
+                            <div style="flex: 1;"></div>
+                            <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" style="padding:3px 0px">
+                                <path
+                                    d="m13.25 22.3-1.65-1.65 3.6-3.6L6.95 8.8l-3.6 3.6-1.65-1.65 1.5-1.5L1.55 7.6l2.1-2.1L2 3.85 3.85 2 5.5 3.65l2.1-2.1L9.25 3.2l1.5-1.5 1.65 1.65-3.6 3.6 8.25 8.25 3.6-3.6 1.65 1.65-1.5 1.5 1.65 1.65-2.1 2.1L22 20.15 20.15 22l-1.65-1.65-2.1 2.1-1.65-1.65Z" />
+                            </svg>
+                            <div style="width: 12px;"></div>
+                            <span class="Rubik-font"
+                                style="line-height: 30px;font-size: 24px;padding:0px 8px 0px 0px">蛋蛋重量</span>
+                            <span class="Rubik-font"
+                                style="line-height: 30px;font-size: 24px;padding-right: 5px;">{egg_weight_out}</span>
+                            <span class="Rubik-font" style="line-height: 30px;font-size: 24px;">克</span>
+                            <div style="flex: 1;"></div>
+                        </div>
+                    </div>
+
+
+                </div>
+                <div style="width: 100%; flex: 1;padding: 20px 40px 20px 40px;">
+                    <div style="background-color: rgba(46, 101, 120, 0.05);padding: 40px;border-radius: 50px;">
+                        <div style="display: flex;">
+                            <span class="Rubic-font"
+                                style="font-size: 24px;font-weight:600;line-height: 40px;">大众点评分数：</span>
+                            <div style="flex: 1;"></div>
+                            <div style="">
+                                <span class="Rubic-font"
+                                    style="font-size: 36px;font-weight:600;line-height: 40px;">{Score_out}</span>
+                                <span>分</span>
+                            </div>
+
+                        </div>
+                        <br>
+                        <span>{dick_comment}</span>
+                        <!-- <span>Test Text</span><br>
+                        <span>Test Text</span><br> -->
+                    </div>
+                    <div style="padding: 40px;border-radius: 50px;">
+                        <span>系统评价：</span>
+                        <span>{System_comment_out}</span>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
+    
+    """
+
+    # html = """
+    # <body style="margin:0px;padding:0px;">
+    #     <div style="background-color:rgb(77, 77, 77);margin:0px;padding:0px;">
+    #         <h1>Hello world!</h1>
+    #     </div>
+    # </body>
+    
+    # """
+    browser = Ariadne.current().launch_manager.get_interface(PlaywrightBrowser)
+    async with browser.page(
+            viewport={"width": 1080, "height": 800},
+            device_scale_factor=1.5
+    ) as page:
+        await page.set_content(html)
+        img = await page.screenshot(
+            type="jpeg", quality=80, full_page=True, scale="device"
+        )
+    return await send_message(event, MessageChain(Image(data_bytes=img)), app.account)
 
 # Seed
 def RandomSeed(supplicant: Member | Friend):
