@@ -1,19 +1,27 @@
+import json
 import random
 from datetime import datetime
-import json
 from pathlib import Path
 
 from graia.ariadne import Ariadne
-from graia.ariadne.event.message import Friend, Member, GroupMessage, FriendMessage, MessageEvent
+from graia.ariadne.event.message import (
+    Friend,
+    Member,
+    GroupMessage,
+    FriendMessage,
+    MessageEvent,
+)
 from graia.ariadne.message.chain import MessageChain
 from graia.ariadne.message.element import Image
-from graia.ariadne.message.parser.twilight import Twilight, FullMatch,UnionMatch
+from graia.ariadne.message.parser.twilight import Twilight, UnionMatch
 from graia.ariadne.util.saya import listen, dispatch, decorate
 from graia.saya import Channel
 from graiax.playwright import PlaywrightBrowser
 
-from library.decorator.permission import Permission
-from library.model.permission import UserPerm
+from library.decorator.blacklist import Blacklist
+from library.decorator.distribute import Distribution
+from library.decorator.function_call import FunctionCall
+from library.decorator.switch import Switch
 from library.util.dispatcher import PrefixMatch
 from library.util.message import send_message
 
@@ -39,24 +47,31 @@ with settings_file.open("r", encoding="UTF-8") as f:
     COMMENT_TEMPLATES_3 = _data["public_comment_3"]
     COMMENT_TEMPLATES_4 = _data["public_comment_4"]
     COMMENT_TEMPLATES_5 = _data["public_comment_5"]
-_data
 # ################################################################
+
+
 @listen(GroupMessage, FriendMessage)
-@dispatch(
-    Twilight(
-        PrefixMatch(),
-        UnionMatch("今日牛子","随机牛子","我几把呢")
-    )
+@dispatch(Twilight(PrefixMatch(), UnionMatch("今日牛子", "随机牛子", "我几把呢")))
+@decorate(
+    Switch.check(channel.module),
+    Distribution.distribute(),
+    Blacklist.check(),
+    FunctionCall.record(channel.module),
 )
-async def playwright_showcase(app: Ariadne, event: MessageEvent):
-    RandomSeed(event.sender)
+async def daily_news_playwright(app: Ariadne, event: MessageEvent):
+    random_seed(event.sender)
     # #######################################################################
     # TODO:PlayWright重构
     # #######################################################################
     # 需要首先判断牛子是否大于0
     news_length = random.randint(-10, 30)
-    news_or_cloaca = ""
     a = "\n"
+
+    phimosis_status = "未知"
+    boki_status = "未知"
+    egg_weight = "未知"
+    angle = f"未知"
+
     if news_length > 0:
 
         # 确定拥有的生殖器类型
@@ -159,14 +174,14 @@ async def playwright_showcase(app: Ariadne, event: MessageEvent):
     white = "white"
     ## 设想是如果r+g+b大于382就将覆盖层文字修改为黑色，否则为白色
     if cr + cg + cb > 382:
-        Hextextcolor = "rgb(0,0,0)"
+        hextextcolor = "rgb(0,0,0)"
     else:
-        Hextextcolor = "rgb(255,255,255)"
+        hextextcolor = "rgb(255,255,255)"
     # RGB-to-Hex 将RGB转换为Hex值，使其占用长度减少
-    Hexcolor = ("{:02X}" * 3).format(cr, cg, cb)
-    print(cr, cg, cb)
-    print(Hexcolor)
-    print(Hextextcolor)
+    hexcolor = ("{:02X}" * 3).format(cr, cg, cb)
+    # print(cr, cg, cb)
+    # print(hexcolor)
+    # print(hextextcolor)
     # #######################################################################
     # 先判断牛子是否大于0
     # >0 为正常牛子
@@ -175,32 +190,30 @@ async def playwright_showcase(app: Ariadne, event: MessageEvent):
 
     # 向PlayWright输出的参数内容
     # 生殖器类型
-    News_or_cloaca_out = news_or_cloaca
+    news_or_cloaca_out = news_or_cloaca
     # 长度
-    News_length_out = news_length
+    news_length_out = news_length
     # 系统评价
-    System_comment_out = dick_length_evaluate
+    system_comment_out = dick_length_evaluate
     # 颜色
-    Hextextcolor_out = Hextextcolor
-    Hexcolor_out = f"#{Hexcolor}"
+    hextextcolor_out = hextextcolor
+    hexcolor_out = f"#{hexcolor}"
     dick_enchant_out = dick_enchant
     phimosis_status_out = phimosis_status
     boki_status_out = boki_status
     egg_weight_out = egg_weight
     # 大众点评分数
-    Score_out = news_score / 10
-    if news_or_cloaca == "牛子":
-        news_message = f"你今天有一根{dick_enchant}{Hexcolor_out}{boki_status}的{News_length_out}CM长的，{angle_status}角度为{angle}的{phimosis_status}的,并且蛋蛋{egg_weight}的牛子{a}系统点评：{System_comment_out}{a}大众点评：{Score_out}分，{dick_comment}"
-    else:
-        news_message = f"你今天有一根{dick_enchant}{Hexcolor_out}的{News_length_out}CM深的泄殖腔{a}系统点评：{System_comment_out}{a}大众点评：{Score_out}分，{dick_comment}"
-
-
-    random.seed()
-
-
-
+    score_out = news_score / 10
     # #######################################################################
-    html = """
+    # Commented since not used
+    # if news_or_cloaca == "牛子":
+    #     news_message = f"你今天有一根{dick_enchant}{hexcolor_out}{boki_status}的{news_length_out}CM长的，{angle_status}角度为{angle}的{phimosis_status}的,并且蛋蛋{egg_weight}的牛子{a}系统点评：{system_comment_out}{a}大众点评：{Score_out}分，{dick_comment}"
+    # else:
+    #     news_message = f"你今天有一根{dick_enchant}{hexcolor_out}的{news_length_out}CM深的泄殖腔{a}系统点评：{system_comment_out}{a}大众点评：{Score_out}分，{dick_comment}"
+    # #######################################################################
+    random.seed()
+    html = (
+        """
     
 <!doctype html>
 <html lang="zh-cmn-Hans">
@@ -309,19 +322,20 @@ async def playwright_showcase(app: Ariadne, event: MessageEvent):
     }
 </style>
 
-"""+f"""
+"""
+        + f"""
 
 <body class="limit" style="margin:0px;padding:0px;background-color:transparent;">
     <div style="background-color: #FDFCFC; border-radius: 64px;">
         <div style="height:180px;background-color: rgba(46, 101, 120, 0.05);">
             <div style="display: flex;line-height: 180px">
                 <span class="Rubik-font" style="font-size: 56px;margin-left:56px;">Random_News</span>
-                <span class="Rubik-font right-align" style="font-size: 64px;margin-right: 56px;flex: 1;">{Score_out}<span
+                <span class="Rubik-font right-align" style="font-size: 64px;margin-right: 56px;flex: 1;">{score_out}<span
                         style="font-size: 24px;;">分</span></span>
             </div>
             <div style="display: flex;">
                 <div style="width: 400px;padding: 20px 0px 40px 40px;">
-                    <h2 style="text-align: center;">您今天拥有的是{News_or_cloaca_out}</h2><br>
+                    <h2 style="text-align: center;">您今天拥有的是{news_or_cloaca_out}</h2><br>
                     <div style="border: 1px dashed #74787A;border-radius: 50px;text-align: center;padding: 20px;">
                         <div style="display: flex;">
                             <div style="flex: 1;"></div>
@@ -333,7 +347,7 @@ async def playwright_showcase(app: Ariadne, event: MessageEvent):
                             <span class="Rubik-font"
                                 style="line-height: 30px;font-size: 24px;padding:0px 8px 0px 0px">颜色</span>
                             <span class="Rubik-font"
-                                style="line-height: 30px;font-size: 24px;background-color: {Hexcolor_out};padding:0px 8px;color{Hextextcolor_out}">{Hexcolor_out}</span>
+                                style="line-height: 30px;font-size: 24px;background-color: {hexcolor_out};padding:0px 8px;color{hextextcolor_out}">{hexcolor_out}</span>
                             <div style="flex: 1;"></div>
                         </div>
                     </div>
@@ -365,7 +379,7 @@ async def playwright_showcase(app: Ariadne, event: MessageEvent):
                             <span class="Rubik-font"
                                 style="line-height: 30px;font-size: 24px;padding:0px 8px 0px 0px">长度</span>
                             <span class="Rubik-font"
-                                style="line-height: 30px;font-size: 24px;padding-right: 5px;">{News_length_out}</span>
+                                style="line-height: 30px;font-size: 24px;padding-right: 5px;">{news_length_out}</span>
                             <span class="Rubik-font" style="line-height: 30px;font-size: 24px;">CM</span>
                             <div style="flex: 1;"></div>
                         </div>
@@ -427,7 +441,7 @@ async def playwright_showcase(app: Ariadne, event: MessageEvent):
                             <div style="flex: 1;"></div>
                             <div style="">
                                 <span class="Rubic-font"
-                                    style="font-size: 36px;font-weight:600;line-height: 40px;">{Score_out}</span>
+                                    style="font-size: 36px;font-weight:600;line-height: 40px;">{score_out}</span>
                                 <span>分</span>
                             </div>
 
@@ -439,7 +453,7 @@ async def playwright_showcase(app: Ariadne, event: MessageEvent):
                     </div>
                     <div style="padding: 40px;border-radius: 50px;">
                         <span>系统评价：</span>
-                        <span>{System_comment_out}</span>
+                        <span>{system_comment_out}</span>
                     </div>
 
                 </div>
@@ -452,6 +466,7 @@ async def playwright_showcase(app: Ariadne, event: MessageEvent):
 </html>
     
     """
+    )
 
     # html = """
     # <body style="margin:0px;padding:0px;">
@@ -459,12 +474,11 @@ async def playwright_showcase(app: Ariadne, event: MessageEvent):
     #         <h1>Hello world!</h1>
     #     </div>
     # </body>
-    
+
     # """
     browser = Ariadne.current().launch_manager.get_interface(PlaywrightBrowser)
     async with browser.page(
-            viewport={"width": 1080, "height": 800},
-            device_scale_factor=1.5
+        viewport={"width": 1080, "height": 800}, device_scale_factor=1.5
     ) as page:
         await page.set_content(html)
         img = await page.screenshot(
@@ -472,6 +486,7 @@ async def playwright_showcase(app: Ariadne, event: MessageEvent):
         )
     return await send_message(event, MessageChain(Image(data_bytes=img)), app.account)
 
+
 # Seed
-def RandomSeed(supplicant: Member | Friend):
+def random_seed(supplicant: Member | Friend):
     random.seed(int(f"{datetime.now().strftime('%Y%m%d')}{supplicant.id}"))
