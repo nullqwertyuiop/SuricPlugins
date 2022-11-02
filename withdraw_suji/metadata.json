@@ -1,0 +1,19 @@
+{
+    "name": "撤回suji",
+    "version": "0.0.0",
+    "pack": "module.withdraw_suji",
+    "authors": [
+        "suchen"
+    ],
+    "required": [],
+    "description": "撤回群主不想看到的词",
+    "category": [
+        "withdraw:撤回"
+    ],
+    "advanced": {
+        "enable_by_default": false,
+        "allow_disable": true,
+        "allow_unload": true,
+        "hidden": false
+    }
+}
