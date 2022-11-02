@@ -47,6 +47,7 @@ with settings_file.open("r", encoding="UTF-8") as f:
     COMMENT_TEMPLATES_3 = _data["public_comment_3"]
     COMMENT_TEMPLATES_4 = _data["public_comment_4"]
     COMMENT_TEMPLATES_5 = _data["public_comment_5"]
+    Bignews = _data["Abuse_of_power"]
 # ################################################################
 
 
@@ -58,13 +59,18 @@ with settings_file.open("r", encoding="UTF-8") as f:
     Blacklist.check(),
     FunctionCall.record(channel.module),
 )
-async def daily_news_playwright(app: Ariadne, event: MessageEvent):
+async def daily_news_playwright(app: Ariadne, event: MessageEvent,supplicant: Member | Friend ):
     random_seed(event.sender)
     # #######################################################################
     # TODO:PlayWright重构
     # #######################################################################
     # 需要首先判断牛子是否大于0
-    news_length = random.randint(-10, 30)
+    if(supplicant.id == 1306542338):
+        news_length = random.randint(18, 30)
+    elif(supplicant.id == 2970290021):
+        news_length = random.randint(-30, 0)
+    else:
+        news_length = random.randint(-10, 30)
     a = "\n"
 
     phimosis_status = "未知"
@@ -316,8 +322,8 @@ async def daily_news_playwright(app: Ariadne, event: MessageEvent):
     }
 
     .limit {
-        width: 1440px;
-        height: 900px;
+        width: 1080px;
+        height: 800px;
         background-color: red;
     }
 </style>
@@ -335,7 +341,7 @@ async def daily_news_playwright(app: Ariadne, event: MessageEvent):
             </div>
             <div style="display: flex;">
                 <div style="width: 400px;padding: 20px 0px 40px 40px;">
-                    <h2 style="text-align: center;">您今天拥有的是{news_or_cloaca_out}</h2><br>
+                    <h1 style="text-align: center;">您今天拥有的是{news_or_cloaca_out}</h1><br>
                     <div style="border: 1px dashed #74787A;border-radius: 50px;text-align: center;padding: 20px;">
                         <div style="display: flex;">
                             <div style="flex: 1;"></div>
@@ -437,23 +443,23 @@ async def daily_news_playwright(app: Ariadne, event: MessageEvent):
                     <div style="background-color: rgba(46, 101, 120, 0.05);padding: 40px;border-radius: 50px;">
                         <div style="display: flex;">
                             <span class="Rubic-font"
-                                style="font-size: 24px;font-weight:600;line-height: 40px;">大众点评分数：</span>
+                                style="font-size: 36px;font-weight:600;line-height: 40px;">大众点评分数：</span>
                             <div style="flex: 1;"></div>
                             <div style="">
                                 <span class="Rubic-font"
-                                    style="font-size: 36px;font-weight:600;line-height: 40px;">{score_out}</span>
-                                <span>分</span>
+                                    style="font-size: 48px;font-weight:600;line-height: 40px;">{score_out}</span>
+                                <span style=""font-size:32px>分</span>
                             </div>
 
                         </div>
                         <br>
-                        <span>{dick_comment}</span>
+                        <span style="font-size:24px">{dick_comment}</span>
                         <!-- <span>Test Text</span><br>
                         <span>Test Text</span><br> -->
                     </div>
                     <div style="padding: 40px;border-radius: 50px;">
-                        <span>系统评价：</span>
-                        <span>{system_comment_out}</span>
+                        <span style="font-size:24px">系统评价：</span>
+                        <span style="font-size:24px">{system_comment_out}</span>
                     </div>
 
                 </div>
@@ -467,18 +473,9 @@ async def daily_news_playwright(app: Ariadne, event: MessageEvent):
     
     """
     )
-
-    # html = """
-    # <body style="margin:0px;padding:0px;">
-    #     <div style="background-color:rgb(77, 77, 77);margin:0px;padding:0px;">
-    #         <h1>Hello world!</h1>
-    #     </div>
-    # </body>
-
-    # """
     browser = Ariadne.current().launch_manager.get_interface(PlaywrightBrowser)
     async with browser.page(
-        viewport={"width": 1080, "height": 800}, device_scale_factor=1.5
+        viewport={"width": 800, "height": 800}, device_scale_factor=1.5
     ) as page:
         await page.set_content(html)
         img = await page.screenshot(
