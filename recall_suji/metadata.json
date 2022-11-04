@@ -1,14 +1,15 @@
 {
     "name": "撤回suji",
     "version": "0.0.0",
-    "pack": "module.withdraw_suji",
+    "pack": "module.recall_suji",
     "authors": [
         "suchen"
     ],
     "required": [],
     "description": "撤回群主不想看到的词",
     "category": [
-        "withdraw:撤回"
+        "recall:撤回",
+        "utility:实用工具"
     ],
     "advanced": {
         "enable_by_default": false,

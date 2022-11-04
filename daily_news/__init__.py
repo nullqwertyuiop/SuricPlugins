@@ -175,6 +175,10 @@ async def daily_news_playwright(app: Ariadne, event: MessageEvent,supplicant: Me
     cr = random.randint(0, 255)
     cg = random.randint(0, 255)
     cb = random.randint(0, 255)
+    # # 临时测试
+    # cr = 0
+    # cg = 0
+    # cb = 0
     ## 没用的两个参数
     black = "black"
     white = "white"
@@ -194,23 +198,29 @@ async def daily_news_playwright(app: Ariadne, event: MessageEvent,supplicant: Me
     # <0 为腔
     # #######################################################################
 
-    # 向PlayWright输出的参数内容
+# 向PlayWright输出的参数内容
     # 生殖器类型
     news_or_cloaca_out = news_or_cloaca
     # 长度
     news_length_out = news_length
     # 系统评价
     system_comment_out = dick_length_evaluate
-    # 颜色
+    # 颜色底色
     hextextcolor_out = hextextcolor
+    # 颜色
     hexcolor_out = f"#{hexcolor}"
+    # 附魔
     dick_enchant_out = dick_enchant
+    # 是否包茎
     phimosis_status_out = phimosis_status
+    # 是否勃起
     boki_status_out = boki_status
+    # 蛋蛋重量
     egg_weight_out = egg_weight
     # 大众点评分数
     score_out = news_score / 10
     # #######################################################################
+    # 史前巨型屎山，没用了 但是不是很想删除，可能是有感情了
     # Commented since not used
     # if news_or_cloaca == "牛子":
     #     news_message = f"你今天有一根{dick_enchant}{hexcolor_out}{boki_status}的{news_length_out}CM长的，{angle_status}角度为{angle}的{phimosis_status}的,并且蛋蛋{egg_weight}的牛子{a}系统点评：{system_comment_out}{a}大众点评：{Score_out}分，{dick_comment}"
@@ -353,7 +363,7 @@ async def daily_news_playwright(app: Ariadne, event: MessageEvent,supplicant: Me
                             <span class="Rubik-font"
                                 style="line-height: 30px;font-size: 24px;padding:0px 8px 0px 0px">颜色</span>
                             <span class="Rubik-font"
-                                style="line-height: 30px;font-size: 24px;background-color: {hexcolor_out};padding:0px 8px;color{hextextcolor_out}">{hexcolor_out}</span>
+                                style="line-height: 30px;font-size: 24px;background-color: {hexcolor_out};padding:0px 8px;color:{hextextcolor_out}">{hexcolor_out}</span>
                             <div style="flex: 1;"></div>
                         </div>
                     </div>
@@ -487,3 +497,19 @@ async def daily_news_playwright(app: Ariadne, event: MessageEvent,supplicant: Me
 # Seed
 def random_seed(supplicant: Member | Friend):
     random.seed(int(f"{datetime.now().strftime('%Y%m%d')}{supplicant.id}"))
+
+
+@listen(GroupMessage, FriendMessage)
+@dispatch(Twilight(PrefixMatch(), UnionMatch("Null几把呢", "你几把呢")))
+@decorate(
+    Switch.check(channel.module),
+    Distribution.distribute(),
+    Blacklist.check(),
+    FunctionCall.record(channel.module),
+)
+async def daily_news_playwright(app: Ariadne, event: MessageEvent,supplicant: Member | Friend ):
+    await send_message(
+            event.sender.group if isinstance(event, GroupMessage) else event.sender,
+            MessageChain("你几把消失了"),
+            app.account,
+        )

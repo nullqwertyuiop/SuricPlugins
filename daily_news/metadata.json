@@ -1,10 +1,11 @@
 {
     "name": "今日牛子",
-    "version": "2.0.2",
+    "version": "2.0.3",
     "pack": "module.daily_news",
     "authors": [
         "suchen",
-        "a57495681800"
+        "a57495681800",
+        "Nullqwertyuiop"
     ],
     "required": [],
     "description": "获取你的每日牛子，每天一根，不许多拿！",
